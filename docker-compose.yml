@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  # PostgreSQL 16 Enterprise Database with GIN & Trigram extensions
+  postgres:
+    image: postgres:16-alpine
+    container_name: datascope-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: datascope
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    command: >
+      postgres -c shared_buffers=256MB
+               -c effective_cache_size=768MB
+               -c work_mem=16MB
+               -c maintenance_work_mem=64MB
+
+  # Redis for Search Query Caching & Rate Limiting
+  redis:
+    image: redis:7-alpine
+    container_name: datascope-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:

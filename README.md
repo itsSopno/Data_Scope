@@ -210,3 +210,4 @@ Open **[http://localhost:3000](http://localhost:3000)** in your browser.
 | Combined 4-Filter Query | 100,000 records | 18.6 ms | 2.1 ms |
 | Multi-Column Sort (`revenue:desc`) | 100,000 records | 11.4 ms | 1.4 ms |
 | Page 1 to Page 200 Jump | 100,000 records | 9.8 ms | 1.2 ms |
+

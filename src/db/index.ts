@@ -1,17 +1,15 @@
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
+import { drizzle } from "drizzle-orm/node-postgres";
+import { Pool } from "pg";
 import * as schema from "./schema";
 
 const connectionString =
-  process.env.DATABASE_URL || "postgresql://postgres:postgres@localhost:5432/datascope";
+  process.env.DATABASE_URL || "postgresql://postgres:password@localhost:5432/datascope";
 
-// Disable prefetch as it is not supported for "Transaction" pool mode (e.g. Supabase, Neon)
-export const client = postgres(connectionString, {
-  prepare: false,
-  max: 20, // Connection pool size
-  idle_timeout: 20,
-  connect_timeout: 10,
+export const pool = new Pool({
+  connectionString,
+  max: 20,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 5000,
 });
 
-export const db = drizzle(client, { schema });
-
+export const db = drizzle(connectionString, { schema } as any);

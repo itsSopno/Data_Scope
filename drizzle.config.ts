@@ -8,6 +8,4 @@ export default defineConfig({
     url: process.env.DATABASE_URL || "postgresql://postgres:password@localhost:5432/datascope",
   },
   verbose: true,
-  strict: true,
 });
-

@@ -1,5 +1,5 @@
-import { db, client } from "../src/db";
-import { users, datasets, datasetRecords, savedViews } from "../src/db/schema";
+import { db, pool } from "../src/db";
+import { users, datasets, datasetRecords } from "../src/db/schema";
 import { generateMockRecords } from "../src/lib/mock-data";
 
 async function runSeed() {
@@ -103,10 +103,9 @@ async function runSeed() {
   } catch (err) {
     console.error("❌ Seeding failed:", err);
   } finally {
-    await client.end();
+    await pool.end();
     process.exit(0);
   }
 }
 
 runSeed();
-

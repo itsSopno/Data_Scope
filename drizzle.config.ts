@@ -8,9 +8,9 @@ export default defineConfig({
   schema: "./src/db/schema.ts",
   out: "./drizzle",
   dialect: "postgresql",
+  schemaFilter: ["public"],
   dbCredentials: {
-    url: process.env.DATABASE_URL || "postgresql://postgres.gnlxsabowfwpveymkspi:zxc5566ed@aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres",
-    ssl: { rejectUnauthorized: false },
+    url: process.env.DATABASE_URL || "postgresql://postgres.tmwywnxmonmzejiuompl:zxc1122Edzxc@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres",
   },
   verbose: true,
 });

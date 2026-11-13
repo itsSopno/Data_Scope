@@ -15,209 +15,218 @@ import {
   ResponsiveContainer,
   AreaChart,
   Area,
-  PieChart,
-  Pie,
-  Cell,
 } from "recharts";
-import {
-  BarChart3,
-  TrendingUp,
-  Activity,
-  Layers,
-  Filter,
-} from "lucide-react";
 
-const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"];
+const compact = new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 });
+
+// Status gulo-r jonno shamanyo muted rong
+const STATUS_COLORS = ["#2563eb", "#059669", "#d97706", "#dc2626", "#7c3aed"];
+
+// Tooltip Tailwind class diye, tai light/dark duita theme-e-i thik thake
+function ChartTooltip({
+  active,
+  payload,
+  label,
+  format,
+}: {
+  active?: boolean;
+  payload?: any[];
+  label?: string;
+  format: (n: number) => string;
+}) {
+  if (!active || !payload?.length) return null;
+  return (
+    <div className="rounded-md border border-border bg-card px-3 py-2 text-xs shadow-sm">
+      <p className="text-muted-foreground">{label}</p>
+      <p className="mt-0.5 font-medium text-foreground">{format(Number(payload[0].value))}</p>
+    </div>
+  );
+}
+
+function Panel({
+  title,
+  note,
+  children,
+}: {
+  title: string;
+  note?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="rounded-lg border border-border bg-card p-5">
+      <h3 className="text-sm font-semibold text-foreground">{title}</h3>
+      {note && <p className="mt-0.5 text-xs text-muted-foreground">{note}</p>}
+      <div className="mt-5">{children}</div>
+    </section>
+  );
+}
+
+const axisProps = {
+  stroke: "currentColor",
+  strokeOpacity: 0.2,
+  tick: { fill: "currentColor", fontSize: 12 },
+  tickLine: false,
+} as const;
 
 export default function AnalyticsPage() {
   const { selectedDatasetId } = useAppSelector((state) => state.dataset);
-  const { data: analytics, isLoading } = useGetAnalyticsQuery(selectedDatasetId);
+  const { data: analytics, isLoading, isError } = useGetAnalyticsQuery(selectedDatasetId);
 
-  if (isLoading || !analytics) {
+  if (isLoading) {
     return (
       <DashboardShell>
-        <div className="flex h-96 items-center justify-center">
-          <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full" />
+        <div className="flex h-96 items-center justify-center text-sm text-muted-foreground">
+          Loading analytics...
         </div>
       </DashboardShell>
     );
   }
 
+  if (isError || !analytics) {
+    return (
+      <DashboardShell>
+        <div className="flex h-96 flex-col items-center justify-center gap-1 text-center">
+          <p className="font-medium text-foreground">We couldn&apos;t load the analytics</p>
+          <p className="text-sm text-muted-foreground">Please refresh the page or try again in a moment.</p>
+        </div>
+      </DashboardShell>
+    );
+  }
+
+  // Hardcode na kore real data theke hishab kora
+  const activeShare = analytics.totalRecords
+    ? Math.round((analytics.activeCount / analytics.totalRecords) * 100)
+    : 0;
+  const statusTotal = analytics.recordsByStatus.reduce((sum, s) => sum + s.count, 0) || 1;
+  const maxFilterUse = Math.max(1, ...analytics.frequentFilters.map((f) => f.usageCount));
+
+  const kpis = [
+    { label: "Total records", value: formatNumber(analytics.totalRecords), note: "In this dataset" },
+    { label: "Total revenue", value: formatCurrency(analytics.totalRevenue), note: "Across all records" },
+    {
+      label: "Active accounts",
+      value: formatNumber(analytics.activeCount),
+      note: `${activeShare}% of all records`,
+    },
+    { label: "Average deal size", value: formatCurrency(analytics.avgDealSize), note: "Per contract" },
+  ];
+
   return (
     <DashboardShell>
-      <div className="space-y-6">
+      <div className="space-y-8">
         <div>
-          <h2 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
-            <BarChart3 className="h-5 w-5 text-primary" /> Dataset Intelligence & Analytics
-          </h2>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            Real-time backend aggregations computed over 100,000+ indexed PostgreSQL records
+          <h2 className="text-xl font-semibold tracking-tight text-foreground">Analytics</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            A summary of the records in the selected dataset.
           </p>
         </div>
 
-        {/* KPI Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="p-5 rounded-xl border border-border bg-card shadow-xs">
-            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">
-              Total Scaled Records
-            </span>
-            <span className="text-2xl font-bold font-mono text-foreground mt-1 block">
-              {formatNumber(analytics.totalRecords)}
-            </span>
-            <span className="text-[11px] text-emerald-400 font-medium">100% Ingested & Indexed</span>
-          </div>
-
-          <div className="p-5 rounded-xl border border-border bg-card shadow-xs">
-            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">
-              Aggregate Revenue
-            </span>
-            <span className="text-2xl font-bold font-mono text-emerald-400 mt-1 block">
-              {formatCurrency(analytics.totalRevenue)}
-            </span>
-            <span className="text-[11px] text-muted-foreground">Across enterprise tiers</span>
-          </div>
-
-          <div className="p-5 rounded-xl border border-border bg-card shadow-xs">
-            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">
-              Active Accounts
-            </span>
-            <span className="text-2xl font-bold font-mono text-foreground mt-1 block">
-              {formatNumber(analytics.activeCount)}
-            </span>
-            <span className="text-[11px] text-blue-400 font-medium">64.2% Health Ratio</span>
-          </div>
-
-          <div className="p-5 rounded-xl border border-border bg-card shadow-xs">
-            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">
-              Average Deal Valuation
-            </span>
-            <span className="text-2xl font-bold font-mono text-foreground mt-1 block">
-              {formatCurrency(analytics.avgDealSize)}
-            </span>
-            <span className="text-[11px] text-muted-foreground">Mean contract size</span>
-          </div>
-        </div>
-
-        {/* Row 1: Growth Trends & Records by Category */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="p-5 rounded-xl border border-border bg-card shadow-xs space-y-4">
-            <div className="flex items-center justify-between border-b border-border pb-3">
-              <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-                <TrendingUp className="h-4 w-4 text-emerald-400" /> Data Ingestion & Revenue Trends
-              </h3>
-              <span className="text-xs font-mono text-muted-foreground">Monthly Aggregates</span>
+        {/* Key figures: ek box-e, shoman 4 bhag */}
+        <dl className="grid grid-cols-2 divide-border rounded-lg border border-border bg-card lg:grid-cols-4 lg:divide-x">
+          {kpis.map((k, i) => (
+            <div
+              key={k.label}
+              className={`p-5 ${i < 2 ? "border-b border-border lg:border-b-0" : ""} ${i % 2 === 0 ? "border-r border-border lg:border-r-0" : ""}`}
+            >
+              <dt className="text-sm text-muted-foreground">{k.label}</dt>
+              <dd className="mt-1 text-2xl font-semibold tabular-nums text-foreground">{k.value}</dd>
+              <p className="mt-1 text-xs text-muted-foreground">{k.note}</p>
             </div>
+          ))}
+        </dl>
 
-            <div className="h-72 w-full">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <Panel title="Revenue by month" note="Monthly totals">
+            <div className="h-72 w-full text-muted-foreground">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={analytics.growthTrends} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.4} />
-                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#2d3748" opacity={0.3} />
-                  <XAxis dataKey="month" stroke="#718096" fontSize={11} />
-                  <YAxis stroke="#718096" fontSize={11} tickFormatter={(val) => `$${(val / 1000000).toFixed(0)}M`} />
-                  <Tooltip
-                    contentStyle={{ backgroundColor: "#1e293b", borderColor: "#334155", borderRadius: "8px", fontSize: "12px" }}
-                    formatter={(val: any) => [formatCurrency(Number(val)), "Revenue"]}
+                <AreaChart data={analytics.growthTrends} margin={{ top: 5, right: 10, left: 0, bottom: 0 }}>
+                  <CartesianGrid stroke="currentColor" strokeOpacity={0.12} vertical={false} />
+                  <XAxis dataKey="month" {...axisProps} />
+                  <YAxis {...axisProps} axisLine={false} tickFormatter={(v) => `$${compact.format(v)}`} />
+                  <Tooltip content={<ChartTooltip format={(n) => formatCurrency(n)} />} />
+                  <Area
+                    className="text-primary"
+                    type="monotone"
+                    dataKey="revenue"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    fill="currentColor"
+                    fillOpacity={0.1}
                   />
-                  <Area type="monotone" dataKey="revenue" stroke="#3b82f6" strokeWidth={2} fillOpacity={1} fill="url(#colorRev)" />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
-          </div>
+          </Panel>
 
-          <div className="p-5 rounded-xl border border-border bg-card shadow-xs space-y-4">
-            <div className="flex items-center justify-between border-b border-border pb-3">
-              <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-                <Layers className="h-4 w-4 text-primary" /> Volume Distribution by Category
-              </h3>
-              <span className="text-xs font-mono text-muted-foreground">Grouped Aggregations</span>
-            </div>
-
-            <div className="h-72 w-full">
+          <Panel title="Records by category" note="How many records sit in each category">
+            <div className="h-72 w-full text-muted-foreground">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={analytics.recordsByCategory} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#2d3748" opacity={0.3} />
-                  <XAxis dataKey="category" stroke="#718096" fontSize={11} />
-                  <YAxis stroke="#718096" fontSize={11} tickFormatter={(val) => `${(val / 1000).toFixed(0)}k`} />
+                <BarChart data={analytics.recordsByCategory} margin={{ top: 5, right: 10, left: 0, bottom: 0 }}>
+                  <CartesianGrid stroke="currentColor" strokeOpacity={0.12} vertical={false} />
+                  <XAxis dataKey="category" {...axisProps} />
+                  <YAxis {...axisProps} axisLine={false} tickFormatter={(v) => compact.format(v)} />
                   <Tooltip
-                    contentStyle={{ backgroundColor: "#1e293b", borderColor: "#334155", borderRadius: "8px", fontSize: "12px" }}
-                    formatter={(val: any) => [`${formatNumber(Number(val))} records`, "Count"]}
+                    cursor={{ fill: "currentColor", fillOpacity: 0.06 }}
+                    content={<ChartTooltip format={(n) => `${formatNumber(n)} records`} />}
                   />
-                  <Bar dataKey="count" fill="#6366f1" radius={[4, 4, 0, 0]} />
+                  <Bar className="text-primary" dataKey="count" fill="currentColor" radius={[3, 3, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
-          </div>
+          </Panel>
         </div>
 
-        {/* Row 2: Status Breakdown & Frequently Used Filters */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="p-5 rounded-xl border border-border bg-card shadow-xs space-y-4">
-            <div className="flex items-center justify-between border-b border-border pb-3">
-              <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-                <Activity className="h-4 w-4 text-amber-400" /> Account Status Breakdown
-              </h3>
-            </div>
-
-            <div className="h-64 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={analytics.recordsByStatus}
-                    dataKey="count"
-                    nameKey="status"
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={80}
-                    innerRadius={45}
-                    label={({ name, percent }: any) => `${name} (${(percent * 100).toFixed(0)}%)`}
-                  >
-                    {analytics.recordsByStatus.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    contentStyle={{ backgroundColor: "#1e293b", borderColor: "#334155", borderRadius: "8px", fontSize: "12px" }}
-                    formatter={(val: any) => [formatNumber(Number(val)), "Accounts"]}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-
-          <div className="p-5 rounded-xl border border-border bg-card shadow-xs space-y-4">
-            <div className="flex items-center justify-between border-b border-border pb-3">
-              <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-                <Filter className="h-4 w-4 text-purple-400" /> Most Frequently Executed Filters
-              </h3>
-              <span className="text-xs text-muted-foreground">Audit Log Insights</span>
-            </div>
-
-            <div className="space-y-3 pt-2">
-              {analytics.frequentFilters.map((f, idx) => (
-                <div key={idx} className="space-y-1">
-                  <div className="flex justify-between text-xs">
-                    <span className="font-semibold text-foreground">{f.field}</span>
-                    <span className="font-mono text-muted-foreground">{formatNumber(f.usageCount)} runs</span>
-                  </div>
-                  <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
-                    <div
-                      className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-500"
-                      style={{ width: `${(f.usageCount / 4500) * 100}%` }}
-                    />
-                  </div>
-                </div>
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <Panel title="Account status" note="Share of accounts in each status">
+            <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-muted">
+              {analytics.recordsByStatus.map((s, i) => (
+                <div
+                  key={s.status}
+                  title={s.status}
+                  style={{ width: `${(s.count / statusTotal) * 100}%`, backgroundColor: STATUS_COLORS[i % STATUS_COLORS.length] }}
+                />
               ))}
             </div>
-          </div>
+
+            <ul className="mt-5 divide-y divide-border text-sm">
+              {analytics.recordsByStatus.map((s, i) => (
+                <li key={s.status} className="flex items-center gap-3 py-2.5">
+                  <span
+                    className="h-2.5 w-2.5 shrink-0 rounded-full"
+                    style={{ backgroundColor: STATUS_COLORS[i % STATUS_COLORS.length] }}
+                  />
+                  <span className="flex-1 text-foreground">{s.status}</span>
+                  <span className="tabular-nums text-muted-foreground">{formatNumber(s.count)}</span>
+                  <span className="w-12 text-right tabular-nums text-foreground">
+                    {Math.round((s.count / statusTotal) * 100)}%
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </Panel>
+
+          <Panel title="Most used filters" note="What people filter by most often">
+            <ul className="space-y-4">
+              {analytics.frequentFilters.map((f) => (
+                <li key={f.field}>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-foreground">{f.field}</span>
+                    <span className="tabular-nums text-muted-foreground">
+                      {formatNumber(f.usageCount)} times
+                    </span>
+                  </div>
+                  <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-muted">
+                    <div
+                      className="h-full rounded-full bg-primary"
+                      style={{ width: `${(f.usageCount / maxFilterUse) * 100}%` }}
+                    />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </Panel>
         </div>
       </div>
     </DashboardShell>
   );
 }
-

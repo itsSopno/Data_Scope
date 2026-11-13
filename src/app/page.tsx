@@ -1,146 +1,199 @@
 import Link from "next/link";
-import {
-  Layers,
-  ArrowRight,
-  Database,
-  Zap,
-  ShieldCheck,
-  BarChart3,
-  Search,
-  Filter,
-  CheckCircle2,
-  TableProperties,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
+
+// Product preview-er sample data (illustration, real data noy)
+const SAMPLE_ROWS = [
+  { company: "Northwind Traders", industry: "Logistics", region: "Dhaka", status: "Active", updated: "Today" },
+  { company: "Northfield Textiles", industry: "Manufacturing", region: "Chattogram", status: "Active", updated: "Today" },
+  { company: "North Star Foods", industry: "Retail", region: "Sylhet", status: "Pending", updated: "Yesterday" },
+  { company: "Northbridge Capital", industry: "Finance", region: "Dhaka", status: "Active", updated: "2 days ago" },
+  { company: "Northgate Labs", industry: "Healthcare", region: "Khulna", status: "Inactive", updated: "Last week" },
+];
+
+const STATUS_DOT: Record<string, string> = {
+  Active: "bg-emerald-500",
+  Pending: "bg-amber-500",
+  Inactive: "bg-muted-foreground/50",
+};
+
+const FEATURES = [
+  {
+    title: "Search that stays fast",
+    text: "Searches run on the server, not in the browser, so the page doesn't slow down as your data grows. Typing a few letters is enough to narrow down 100,000+ records.",
+  },
+  {
+    title: "A table you can shape",
+    text: "Show or hide columns, drag to resize them, sort by more than one column, and see your search words highlighted in the results.",
+  },
+  {
+    title: "Views you can share",
+    text: "Your filters and sorting live in the page address. Copy the link, send it to a teammate, and they see exactly what you see.",
+  },
+  {
+    title: "The right access for each person",
+    text: "Roles decide who can view, edit or manage data, so people only see what they need for their work.",
+  },
+];
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary/20">
-      {/* Navbar */}
-      <header className="h-16 border-b border-border/80 backdrop-blur-md bg-card/60 sticky top-0 z-50 px-6 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md">
-            <Layers className="h-5 w-5" />
-          </div>
-          <span className="font-bold text-lg tracking-tight bg-gradient-to-r from-blue-500 to-indigo-500 bg-clip-text text-transparent">
-            DataScope
-          </span>
-          <span className="text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">
-            Enterprise
-          </span>
-        </div>
+    <div className="flex min-h-screen flex-col bg-background text-foreground">
+      {/* Header */}
+      <header className="border-b border-border">
+        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
+          <Link href="/" className="flex items-center gap-2.5">
+            <span className="flex h-7 w-7 items-center justify-center rounded-md bg-primary text-sm font-semibold text-primary-foreground">
+              D
+            </span>
+            <span className="text-base font-semibold tracking-tight">DataScope</span>
+          </Link>
 
-        <div className="flex items-center gap-4">
-          <Link
-            href="/login"
-            className="text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Sign In
-          </Link>
-          <Link
-            href="/explorer"
-            className="text-xs font-semibold px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-md shadow-primary/20 flex items-center gap-1.5"
-          >
-            Open Platform <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
+          <nav className="flex items-center gap-6 text-sm">
+            <Link href="/dashboard" className="text-muted-foreground transition-colors hover:text-foreground">
+              Dashboard
+            </Link>
+            <Link href="/login" className="text-muted-foreground transition-colors hover:text-foreground">
+              Sign in
+            </Link>
+            <Link
+              href="/explorer"
+              className="rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            >
+              Open explorer
+            </Link>
+          </nav>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="relative overflow-hidden py-20 px-6 max-w-6xl mx-auto text-center space-y-6">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
-          <Zap className="h-3.5 w-3.5" /> Sub-second Discovery Across 100,000+ Records
-        </div>
-
-        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-foreground max-w-4xl mx-auto leading-tight">
-          Enterprise Data Discovery &amp; Intelligence Platform
-        </h1>
-
-        <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          Engineered for data-intensive enterprise workloads. Explore multi-column datasets, execute
-          server-side full-text searches, and analyze millions of records with sub-15ms response times.
-        </p>
-
-        <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
-          <Link
-            href="/explorer"
-            className="text-sm font-semibold px-6 py-3 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-lg shadow-primary/25 flex items-center gap-2"
-          >
-            <TableProperties className="h-4 w-4" /> Launch Data Explorer
-          </Link>
-          <Link
-            href="/dashboard"
-            className="text-sm font-semibold px-6 py-3 rounded-xl bg-secondary text-secondary-foreground hover:bg-secondary/80 border border-border transition-all flex items-center gap-2"
-          >
-            <BarChart3 className="h-4 w-4" /> Overview Dashboard
-          </Link>
-        </div>
-
-        {/* Feature Badges */}
-        <div className="pt-10 flex flex-wrap items-center justify-center gap-6 text-xs text-muted-foreground border-t border-border/60">
-          <span className="flex items-center gap-1.5 font-medium">
-            <CheckCircle2 className="h-4 w-4 text-emerald-400" /> PostgreSQL Full-Text Search (GIN)
-          </span>
-          <span className="flex items-center gap-1.5 font-medium">
-            <CheckCircle2 className="h-4 w-4 text-emerald-400" /> RTK Query Server State &amp; Cache
-          </span>
-          <span className="flex items-center gap-1.5 font-medium">
-            <CheckCircle2 className="h-4 w-4 text-emerald-400" /> Virtualized Resizable Table
-          </span>
-          <span className="flex items-center gap-1.5 font-medium">
-            <CheckCircle2 className="h-4 w-4 text-emerald-400" /> Multi-Role RBAC Authorization
-          </span>
-        </div>
-      </section>
-
-      {/* Architecture Highlights Section */}
-      <section className="py-16 px-6 max-w-6xl mx-auto w-full border-t border-border/60 space-y-10">
-        <div className="text-center space-y-2">
-          <h2 className="text-2xl font-bold tracking-tight text-foreground">
-            Engineered for Extreme Scalability &amp; Low Latency
-          </h2>
-          <p className="text-xs text-muted-foreground max-w-lg mx-auto">
-            Addressing core enterprise big data bottlenecks through modern database indexing and frontend system design.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-3">
-            <div className="h-10 w-10 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center">
-              <Search className="h-5 w-5" />
-            </div>
-            <h3 className="text-base font-bold text-foreground">Server-Side Query Engine</h3>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Zero client memory bloat. Dynamic multi-condition WHERE clauses, GIN indexes, and Trigram matching execute directly on PostgreSQL.
+      <main className="flex-1">
+        {/* Hero */}
+        <section className="mx-auto grid max-w-6xl items-center gap-12 px-6 py-16 md:grid-cols-[1fr_1.1fr] md:py-24">
+          <div>
+            <h1 className="text-4xl font-semibold leading-[1.1] tracking-tight sm:text-5xl">
+              Find anything in your data, without the wait.
+            </h1>
+            <p className="mt-5 max-w-[48ch] text-lg leading-relaxed text-muted-foreground">
+              DataScope gives your team one place to search, filter and sort large datasets. It
+              stays quick even with hundreds of thousands of rows.
             </p>
+
+            <div className="mt-8 flex flex-wrap items-center gap-5">
+              <Link
+                href="/explorer"
+                className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+              >
+                Open the explorer <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/dashboard"
+                className="text-sm font-medium text-foreground underline-offset-4 hover:underline"
+              >
+                See the dashboard
+              </Link>
+            </div>
           </div>
 
-          <div className="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-3">
-            <div className="h-10 w-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center">
-              <Zap className="h-5 w-5" />
-            </div>
-            <h3 className="text-base font-bold text-foreground">Smart RTK Caching &amp; Deduplication</h3>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Automatic stale-while-revalidate data fetching with Redis tier caching, debounced query requests, and optimistic updates.
-            </p>
-          </div>
+          {/* Product preview */}
+          <figure>
+            <div className="overflow-hidden rounded-lg border border-border bg-card shadow-sm">
+              <div className="flex items-center justify-between gap-4 border-b border-border px-4 py-3">
+                <div className="flex-1 rounded-md border border-border bg-background px-3 py-1.5 text-sm text-muted-foreground">
+                  north
+                </div>
+                <span className="shrink-0 text-xs text-muted-foreground">5 results</span>
+              </div>
 
-          <div className="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-3">
-            <div className="h-10 w-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center">
-              <TableProperties className="h-5 w-5" />
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[520px] text-left text-sm">
+                  <thead>
+                    <tr className="border-b border-border bg-muted/40 text-xs text-muted-foreground">
+                      <th className="px-4 py-2.5 font-medium">Company</th>
+                      <th className="px-4 py-2.5 font-medium">Industry</th>
+                      <th className="px-4 py-2.5 font-medium">Region</th>
+                      <th className="px-4 py-2.5 font-medium">Status</th>
+                      <th className="px-4 py-2.5 font-medium">Updated</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {SAMPLE_ROWS.map((r) => (
+                      <tr key={r.company} className="border-b border-border last:border-0">
+                        <td className="px-4 py-3 font-medium">
+                          <mark className="bg-primary/15 text-foreground">North</mark>
+                          {r.company.slice(5)}
+                        </td>
+                        <td className="px-4 py-3 text-muted-foreground">{r.industry}</td>
+                        <td className="px-4 py-3 text-muted-foreground">{r.region}</td>
+                        <td className="px-4 py-3">
+                          <span className="flex items-center gap-2">
+                            <span className={`h-1.5 w-1.5 rounded-full ${STATUS_DOT[r.status]}`} />
+                            {r.status}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 text-muted-foreground">{r.updated}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <h3 className="text-base font-bold text-foreground">Advanced Explorer Table</h3>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Dynamic column management, drag resizing, multi-column sorting, keyword highlighting, and deep URL state synchronization.
+            <figcaption className="mt-3 text-xs text-muted-foreground">
+              Sample data, shown for illustration.
+            </figcaption>
+          </figure>
+        </section>
+
+        {/* What it does */}
+        <section className="border-t border-border">
+          <div className="mx-auto grid max-w-6xl gap-10 px-6 py-16 md:grid-cols-[1fr_2fr] md:py-20">
+            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+              Made for working with big tables
+            </h2>
+
+            <dl className="grid gap-x-10 gap-y-9 sm:grid-cols-2">
+              {FEATURES.map((f) => (
+                <div key={f.title} className="border-t border-border pt-4">
+                  <dt className="font-medium">{f.title}</dt>
+                  <dd className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.text}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </section>
+
+        {/* Under the hood */}
+        <section className="border-t border-border bg-muted/30">
+          <div className="mx-auto max-w-6xl px-6 py-10">
+            <p className="max-w-[70ch] text-sm leading-relaxed text-muted-foreground">
+              <span className="font-medium text-foreground">For the technical team: </span>
+              search uses PostgreSQL full-text indexes (GIN) with trigram matching, the interface
+              caches requests with RTK Query, and repeat queries are served from Redis.
             </p>
           </div>
+        </section>
+
+        {/* Closing call to action */}
+        <section className="border-t border-border">
+          <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 px-6 py-14 sm:flex-row sm:items-center">
+            <div>
+              <h2 className="text-2xl font-semibold tracking-tight">Ready to look at your data?</h2>
+              <p className="mt-1 text-muted-foreground">Sign in and open the explorer to get started.</p>
+            </div>
+            <Link
+              href="/explorer"
+              className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            >
+              Open the explorer <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </section>
+      </main>
+
+      <footer className="border-t border-border">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-6 py-6 text-sm text-muted-foreground">
+          <span>&copy; 2026 DataScope</span>
+          <span>Enterprise data discovery</span>
         </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="mt-auto border-t border-border py-8 px-6 text-center text-xs text-muted-foreground">
-        <p>DataScope – Enterprise Data Discovery &amp; Intelligence Platform © 2026.</p>
       </footer>
     </div>
   );
 }
-

@@ -34,7 +34,7 @@ export function RecordDetailDrawer() {
     <div className="fixed inset-0 z-50 flex justify-end bg-background/80 backdrop-blur-xs transition-opacity animate-in fade-in duration-200">
       <div className="w-full max-w-xl bg-card border-l border-border h-full shadow-2xl flex flex-col slide-in-from-right duration-300">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-border bg-muted/30">
+        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-border bg-muted/30">
           <div>
             <div className="flex items-center gap-2">
               <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">
@@ -43,7 +43,7 @@ export function RecordDetailDrawer() {
               <span className="text-xs text-muted-foreground">•</span>
               <span className="text-xs font-semibold text-emerald-400">{record?.status || "Active"}</span>
             </div>
-            <h2 className="text-lg font-bold text-foreground mt-1">
+            <h2 className="text-base sm:text-lg font-bold text-foreground mt-1">
               {record?.customerName || "Loading record details..."}
             </h2>
             <p className="text-xs text-muted-foreground">{record?.company}</p>
@@ -58,7 +58,7 @@ export function RecordDetailDrawer() {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex border-b border-border px-6 gap-6 text-xs font-semibold">
+        <div className="flex border-b border-border px-4 sm:px-6 gap-4 sm:gap-6 text-xs font-semibold overflow-x-auto">
           <button
             onClick={() => setActiveTab("overview")}
             className={`py-3 border-b-2 transition-colors flex items-center gap-1.5 ${

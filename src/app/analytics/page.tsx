@@ -122,15 +122,15 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Key figures: ek box-e, shoman 4 bhag */}
-        <dl className="grid grid-cols-2 divide-border rounded-lg border border-border bg-card lg:grid-cols-4 lg:divide-x">
-          {kpis.map((k, i) => (
+        <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 rounded-lg border border-border bg-card divide-y sm:divide-y-0 sm:divide-x divide-border">
+          {kpis.map((k) => (
             <div
               key={k.label}
-              className={`p-5 ${i < 2 ? "border-b border-border lg:border-b-0" : ""} ${i % 2 === 0 ? "border-r border-border lg:border-r-0" : ""}`}
+              className="p-4 sm:p-5"
             >
-              <dt className="text-sm text-muted-foreground">{k.label}</dt>
-              <dd className="mt-1 text-2xl font-semibold tabular-nums text-foreground">{k.value}</dd>
-              <p className="mt-1 text-xs text-muted-foreground">{k.note}</p>
+              <dt className="text-xs sm:text-sm text-muted-foreground">{k.label}</dt>
+              <dd className="mt-1 text-xl sm:text-2xl font-semibold tabular-nums text-foreground">{k.value}</dd>
+              <p className="mt-1 text-[11px] sm:text-xs text-muted-foreground">{k.note}</p>
             </div>
           ))}
         </dl>

@@ -86,9 +86,9 @@ LIMIT 25 OFFSET 0;`;
         </div>
 
         {/* Content */}
-        <div className="p-6 overflow-y-auto space-y-6 flex-1">
+        <div className="p-4 sm:p-6 overflow-y-auto space-y-6 flex-1">
           {/* Rules Builder Container */}
-          <div className="p-4 rounded-xl bg-muted/30 border border-border space-y-3">
+          <div className="p-3 sm:p-4 rounded-xl bg-muted/30 border border-border space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
                 <Database className="h-3.5 w-3.5 text-primary" /> WHERE Clause Conditions (AND)
@@ -103,7 +103,7 @@ LIMIT 25 OFFSET 0;`;
 
             <div className="space-y-2.5">
               {builderRules.map((rule, idx) => (
-                <div key={rule.id} className="flex items-center gap-2 bg-card p-2 rounded-lg border border-border">
+                <div key={rule.id} className="flex flex-wrap sm:flex-nowrap items-center gap-2 bg-card p-2 rounded-lg border border-border">
                   <span className="text-[11px] font-mono text-muted-foreground w-6 text-center">
                     {idx === 0 ? "IF" : "AND"}
                   </span>

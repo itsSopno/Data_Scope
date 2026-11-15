@@ -35,8 +35,8 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-6">
-      <div className="w-full max-w-md bg-card border border-border rounded-2xl shadow-2xl p-8 space-y-6">
+    <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-4 sm:p-6">
+      <div className="w-full max-w-md bg-card border border-border rounded-2xl shadow-2xl p-5 sm:p-8 space-y-5 sm:space-y-6">
         {/* Brand */}
         <div className="text-center space-y-2">
           <div className="mx-auto h-12 w-12 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/20">

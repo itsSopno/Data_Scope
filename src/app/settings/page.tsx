@@ -67,7 +67,7 @@ export default function SettingsPage() {
             Switch role to test access boundaries and permission gates across the platform:
           </p>
 
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {(["admin", "analyst", "viewer"] as UserRole[]).map((r) => (
               <button
                 key={r}

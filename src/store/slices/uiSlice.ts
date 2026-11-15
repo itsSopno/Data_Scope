@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UIState {
   sidebarCollapsed: boolean;
+  isMobileSidebarOpen: boolean;
   visibleColumns: string[];
   columnWidths: Record<string, number>;
   selectedRecordId: string | null;
@@ -30,6 +31,7 @@ const defaultColumns = [
 
 const initialState: UIState = {
   sidebarCollapsed: false,
+  isMobileSidebarOpen: false,
   visibleColumns: defaultColumns,
   columnWidths: {
     recordNumber: 130,
@@ -60,6 +62,12 @@ export const uiSlice = createSlice({
   reducers: {
     toggleSidebar: (state) => {
       state.sidebarCollapsed = !state.sidebarCollapsed;
+    },
+    toggleMobileSidebar: (state) => {
+      state.isMobileSidebarOpen = !state.isMobileSidebarOpen;
+    },
+    setMobileSidebarOpen: (state, action: PayloadAction<boolean>) => {
+      state.isMobileSidebarOpen = action.payload;
     },
     setSidebarCollapsed: (state, action: PayloadAction<boolean>) => {
       state.sidebarCollapsed = action.payload;
@@ -106,6 +114,8 @@ export const uiSlice = createSlice({
 
 export const {
   toggleSidebar,
+  toggleMobileSidebar,
+  setMobileSidebarOpen,
   setSidebarCollapsed,
   setVisibleColumns,
   toggleColumnVisibility,

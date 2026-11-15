@@ -19,4 +19,4 @@ export const pool = new Pool({
   connectionTimeoutMillis: 5000,
 });
 
-export const db = drizzle({ client: pool, schema });
+export const db = drizzle({ client: pool, schema } as any);

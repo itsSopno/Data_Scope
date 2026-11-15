@@ -86,7 +86,7 @@ export function SavedViewsDropdown() {
       {isOpen && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
-          <div className="absolute left-0 top-9 z-50 w-72 rounded-xl border border-border bg-card p-3 shadow-2xl space-y-3">
+          <div className="absolute left-0 top-9 z-50 w-72 max-w-[85vw] rounded-xl border border-border bg-card p-3 shadow-2xl space-y-3">
             <div className="flex items-center justify-between pb-2 border-b border-border">
               <span className="text-xs font-bold text-foreground flex items-center gap-1.5">
                 <FolderHeart className="h-3.5 w-3.5 text-primary" /> View Presets

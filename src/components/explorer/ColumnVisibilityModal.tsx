@@ -38,7 +38,7 @@ export function ColumnVisibilityDropdown() {
       {isOpen && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
-          <div className="absolute right-0 top-9 z-50 w-56 rounded-xl border border-border bg-card p-3 shadow-xl space-y-2">
+          <div className="absolute right-0 top-9 z-50 w-56 max-w-[85vw] rounded-xl border border-border bg-card p-3 shadow-xl space-y-2">
             <div className="flex items-center justify-between pb-2 border-b border-border">
               <span className="text-xs font-semibold text-foreground">Visible Columns</span>
               <button

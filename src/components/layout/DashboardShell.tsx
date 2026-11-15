@@ -20,8 +20,8 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         <Topbar />
 
         {/* Dynamic Page Content */}
-        <main className="flex-1 overflow-y-auto p-6 bg-muted/10">
-          <div className="mx-auto max-w-[1600px] h-full flex flex-col space-y-4">
+        <main className="flex-1 overflow-y-auto p-3 sm:p-5 md:p-6 bg-muted/10">
+          <div className="mx-auto max-w-[1600px] h-full flex flex-col space-y-4 sm:space-y-5">
             {children}
           </div>
         </main>

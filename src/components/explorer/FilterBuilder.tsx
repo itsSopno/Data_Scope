@@ -82,7 +82,7 @@ export function FilterBuilder() {
           <select
             value={selectedField}
             onChange={(e) => handleFieldChange(e.target.value)}
-            className="text-xs bg-muted/60 border border-input rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-primary text-foreground font-medium"
+            className="text-xs bg-muted/60 border border-input rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-primary text-foreground font-medium w-full sm:w-auto"
           >
             {FILTERABLE_FIELDS.map((f) => (
               <option key={f.value} value={f.value}>
@@ -95,7 +95,7 @@ export function FilterBuilder() {
           <select
             value={operator}
             onChange={(e) => setOperator(e.target.value as FilterOperator)}
-            className="text-xs bg-muted/60 border border-input rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-primary text-foreground font-medium"
+            className="text-xs bg-muted/60 border border-input rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-primary text-foreground font-medium w-full sm:w-auto"
           >
             {currentFieldDef.type === "number" ? (
               <>
@@ -124,7 +124,7 @@ export function FilterBuilder() {
             <select
               value={filterValue}
               onChange={(e) => setFilterValue(e.target.value)}
-              className="text-xs bg-muted/60 border border-input rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-primary text-foreground font-medium"
+              className="text-xs bg-muted/60 border border-input rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-primary text-foreground font-medium w-full sm:w-auto"
             >
               {currentFieldDef.options.map((opt) => (
                 <option key={opt} value={opt}>
@@ -138,14 +138,14 @@ export function FilterBuilder() {
               value={filterValue}
               onChange={(e) => setFilterValue(e.target.value)}
               placeholder="Enter value..."
-              className="text-xs bg-muted/60 border border-input rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-primary text-foreground w-36"
+              className="text-xs bg-muted/60 border border-input rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-primary text-foreground w-full sm:w-36"
             />
           )}
 
           {/* Add Filter Button */}
           <button
             onClick={handleAddCondition}
-            className="flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-xs"
+            className="flex items-center justify-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-xs w-full sm:w-auto"
           >
             <Plus className="h-3.5 w-3.5" /> Add Condition
           </button>

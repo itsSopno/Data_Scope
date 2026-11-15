@@ -46,9 +46,9 @@ export function DataTablePagination({
   const endRecord = Math.min(page * pageSize, total);
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-4 py-3 px-2 text-xs text-muted-foreground select-none">
+    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 py-3 px-1 sm:px-2 text-xs text-muted-foreground select-none">
       {/* Left: Total Records & Speed Metrics */}
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center gap-2 sm:gap-3">
         <span className="font-medium text-foreground">
           Showing <span className="font-semibold text-primary">{formatNumber(startRecord)}</span> to{" "}
           <span className="font-semibold text-primary">{formatNumber(endRecord)}</span> of{" "}
@@ -70,7 +70,7 @@ export function DataTablePagination({
       </div>
 
       {/* Right: Page Size, Jump to Page & Nav Buttons */}
-      <div className="flex items-center gap-4">
+      <div className="flex flex-wrap items-center gap-3 sm:gap-4 w-full sm:w-auto justify-between sm:justify-end">
         {/* Page Size Selector */}
         <div className="flex items-center gap-2">
           <span>Rows per page:</span>

@@ -9,7 +9,7 @@
 ## 1. Project Overview
 **DataScope** is an enterprise-grade Data Discovery and Intelligence Platform engineered to ingest, index, explore, and analyze high-volume structured datasets (100,000 to millions of records) with sub-second retrieval times.
 
-### Core Architecture Philosophy
+### Core Architecture 
 * **Zero Client Memory Bloat:** The entire dataset is never loaded into frontend browser memory. All searches, multi-condition filtering, sorting, and aggregations are computed server-side via PostgreSQL and cached via Redis/RTK Query.
 * **Separation of Concerns:** Clear architectural boundaries between Server State (RTK Query), Global Client State (Redux Toolkit), URL Query State, and Local Component State.
 
